@@ -21,7 +21,7 @@ public:
         // sub_pose = nh.subscribe<geometry_msgs::Pose>(input_topic, 100, &PublishPath::pose_callback, this);
         // sub_odometry = nh.subscribe<nav_msgs::Odometry>(input_topic, 100, &PublishPath::odometry_callback, this);
 
-        sub_custom = nh.subscribe<publish_path::CustomMsg>("input_topic", 100, &PublishPath::custom_callback, this);
+        sub_custom = nh.subscribe<publish_path::CustomMsg>(input_topic, 100, &PublishPath::custom_callback, this);
 
         pub_path = nh.advertise<nav_msgs::Path>(path_topic, 10);
         allocateMemory();
