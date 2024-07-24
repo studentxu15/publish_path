@@ -32,6 +32,13 @@ public:
     std::string path_topic;
     double pub_frequency;
 
+    bool num_limit;
+    int num_max_size;
+
+    bool time_limit;
+    double time_max_limit;
+
+
 	ParamServer()
 		: private_nh("~")
 	{
@@ -40,6 +47,12 @@ public:
         private_nh.param<std::string>("world_frame", world_frame, "map");
         private_nh.param<std::string>("path_topic", path_topic, "/path");
         private_nh.param<double>("pub_frequency", pub_frequency, 10.0);
+
+        private_nh.param<bool>("num_limit", num_limit, true);
+        private_nh.param<int>("num_max_size", num_max_size, 20000);
+
+        private_nh.param<bool>("time_limit", time_limit, false);
+        private_nh.param<double>("time_max_limit", time_max_limit, 100.0);
 	}
 };
 #endif // HEADER_H

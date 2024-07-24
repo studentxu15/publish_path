@@ -46,6 +46,8 @@ public:
         {
             odometry_callback(boost::make_shared<nav_msgs::Odometry>(msg->odometry));
         }
+
+        filtered_pose();
     }
 
     void posestamp_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
@@ -95,6 +97,26 @@ public:
         std::lock_guard<std::mutex> lock(poses_mutex);
         poses_vec.push_back(ptv);
 
+    }
+
+    void filtered_pose()
+    {
+        if (num_limit == true && poses_vec.size() >  static_cast<std::vector<pose_time_vec>::size_type>(num_max_size))
+        {
+            std::lock_guard<std::mutex> lock(poses_mutex);
+            poses_vec.erase(poses_vec.begin());
+        }
+
+        if (time_limit)
+        {
+            std::lock_guard<std::mutex> lock(poses_mutex);
+
+            ros::Time current_time = ros::Time::now();
+            while (!poses_vec.empty() && (current_time - poses_vec.front().timestamp).toSec() > time_max_limit) {
+                poses_vec.erase(poses_vec.begin());
+            }
+
+        }
     }
 
     void path_publish()
