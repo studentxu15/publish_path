@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>  
+    <arg name="project" default="publish_path" />
+    <node pkg="$(arg project)" type="$(arg project)" name="$(arg project)" respawn="false" output="screen" >
+        <rosparam subst_value="true"> 
+            input_topic: /odometry/pose
+            world_frame: map
+            path_topic: /history_path
+            pub_frequency: 10.0
+        </rosparam>
+    </node>
+</launch>

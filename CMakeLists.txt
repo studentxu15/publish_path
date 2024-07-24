@@ -22,6 +22,11 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
 )
 
+add_message_files(
+  FILES
+  CustomMsg.msg
+)
+
 generate_messages(
   DEPENDENCIES
   geometry_msgs

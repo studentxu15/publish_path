@@ -11,6 +11,7 @@
 #include <thread>
 #include <vector>
 #include <nav_msgs/Path.h>
+#include "publish_path/CustomMsg.h"
 
 using namespace std;
 
