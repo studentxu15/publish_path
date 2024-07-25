@@ -3,11 +3,11 @@
 class PublishPath : public ParamServer
 {
 public:
-    // ros::Subscriber sub_posestamp;
-    // ros::Subscriber sub_pose;
-    // ros::Subscriber sub_odometry;
+    ros::Subscriber sub_posestamp;
+    ros::Subscriber sub_pose;
+    ros::Subscriber sub_odometry;
 
-    ros::Subscriber sub_custom;
+    // ros::Subscriber sub_custom;
 
     ros::Publisher pub_path;
 
@@ -17,11 +17,11 @@ public:
 
     PublishPath()
     {
-        // sub_posestamp = nh.subscribe<geometry_msgs::PoseStamped>(input_topic, 100, &PublishPath::posestamp_callback, this);
-        // sub_pose = nh.subscribe<geometry_msgs::Pose>(input_topic, 100, &PublishPath::pose_callback, this);
-        // sub_odometry = nh.subscribe<nav_msgs::Odometry>(input_topic, 100, &PublishPath::odometry_callback, this);
+        sub_posestamp = nh.subscribe<geometry_msgs::PoseStamped>(input_topic_posestamp, 100, &PublishPath::posestamp_callback, this);
+        sub_pose = nh.subscribe<geometry_msgs::Pose>(input_topic_pose, 100, &PublishPath::pose_callback, this);
+        sub_odometry = nh.subscribe<nav_msgs::Odometry>(input_topic_odometry, 100, &PublishPath::odometry_callback, this);
 
-        sub_custom = nh.subscribe<publish_path::CustomMsg>(input_topic, 100, &PublishPath::custom_callback, this);
+        // sub_custom = nh.subscribe<publish_path::CustomMsg>(input_topic, 100, &PublishPath::custom_callback, this);
 
         pub_path = nh.advertise<nav_msgs::Path>(path_topic, 10);
         allocateMemory();
@@ -32,23 +32,23 @@ public:
 
     }
 
-    void custom_callback(const publish_path::CustomMsg::ConstPtr& msg)
-    {
-        if (msg->pose_stamped.header.stamp != ros::Time(0))
-        {
-            posestamp_callback(boost::make_shared<geometry_msgs::PoseStamped>(msg->pose_stamped));
-        }
-        else if (msg->pose.position.x != 0 || msg->pose.position.y != 0 || msg->pose.position.z != 0)
-        {
-            pose_callback(boost::make_shared<geometry_msgs::Pose>(msg->pose));
-        }
-        else if (msg->odometry.header.stamp != ros::Time(0))
-        {
-            odometry_callback(boost::make_shared<nav_msgs::Odometry>(msg->odometry));
-        }
+    // void custom_callback(const publish_path::CustomMsg::ConstPtr& msg)
+    // {
+    //     if (msg->pose_stamped.header.stamp != ros::Time(0))
+    //     {
+    //         posestamp_callback(boost::make_shared<geometry_msgs::PoseStamped>(msg->pose_stamped));
+    //     }
+    //     else if (msg->pose.position.x != 0 || msg->pose.position.y != 0 || msg->pose.position.z != 0)
+    //     {
+    //         pose_callback(boost::make_shared<geometry_msgs::Pose>(msg->pose));
+    //     }
+    //     else if (msg->odometry.header.stamp != ros::Time(0))
+    //     {
+    //         odometry_callback(boost::make_shared<nav_msgs::Odometry>(msg->odometry));
+    //     }
 
-        filtered_pose();
-    }
+    //     filtered_pose();
+    // }
 
     void posestamp_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
     {
@@ -64,6 +64,7 @@ public:
 
         std::lock_guard<std::mutex> lock(poses_mutex);
         poses_vec.push_back(ptv);
+        filtered_pose();
     }
 
     void pose_callback(const geometry_msgs::Pose::ConstPtr& msg)
@@ -80,6 +81,7 @@ public:
 
         std::lock_guard<std::mutex> lock(poses_mutex);
         poses_vec.push_back(ptv);
+        filtered_pose();
     }
 
     void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
@@ -96,6 +98,7 @@ public:
 
         std::lock_guard<std::mutex> lock(poses_mutex);
         poses_vec.push_back(ptv);
+        filtered_pose();
 
     }
 

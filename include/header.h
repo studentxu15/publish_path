@@ -38,14 +38,21 @@ public:
     bool time_limit;
     double time_max_limit;
 
+    std::string input_type;
+
+    std::string input_topic_posestamp;
+    std::string input_topic_pose;
+    std::string input_topic_odometry;
+
 
 	ParamServer()
 		: private_nh("~")
 	{
 		nh.param<std::string>("/PROJECT_NAME", PROJECT_NAME, "publish_path");
-        private_nh.param<std::string>("input_topic", input_topic, "/pose");
+        private_nh.param<std::string>("input_topic", input_topic, "/pose00");
         private_nh.param<std::string>("world_frame", world_frame, "map");
         private_nh.param<std::string>("path_topic", path_topic, "/path");
+        private_nh.param<std::string>("input_type", input_type, "pp");
         private_nh.param<double>("pub_frequency", pub_frequency, 10.0);
 
         private_nh.param<bool>("num_limit", num_limit, true);
@@ -53,6 +60,32 @@ public:
 
         private_nh.param<bool>("time_limit", time_limit, false);
         private_nh.param<double>("time_max_limit", time_max_limit, 100.0);
+
+        initial_topic();
 	}
+
+    void initial_topic()
+    {
+        input_topic_posestamp = "/topic00";
+        input_topic_pose = "/topic01";
+        input_topic_odometry = "/topic02";
+
+        if (input_type == "posestamp")
+        {
+            input_topic_posestamp = input_topic;
+        }
+        else if (input_type == "pose")
+        {
+            input_topic_pose = input_topic;
+        }
+        else if (input_type == "odometry")
+        {
+            input_topic_odometry = input_topic;
+        }
+        else
+        {
+            ROS_ERROR("input_type INPUT ERROR, Please enter the corrent 'input_type' <'posestamp', 'pose' or 'odometry'>");
+        }
+    }
 };
 #endif // HEADER_H

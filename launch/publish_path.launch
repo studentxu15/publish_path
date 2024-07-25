@@ -3,11 +3,12 @@
     <arg name="project" default="publish_path" />
     <node pkg="$(arg project)" type="$(arg project)" name="$(arg project)" respawn="false" output="screen" >
         <rosparam subst_value="true"> 
-            input_topic: /odometry/pose
+            input_type: pose
+            input_topic: /robot_pose
             world_frame: map
             path_topic: /history_path
-            pub_frequency: 10.0
-            num_limit: true
+            pub_frequency: 1.0
+            num_limit: false
             num_max_size: 20000
             time_limit: false
             time_max_limit: 100.0
