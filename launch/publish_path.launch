@@ -3,7 +3,7 @@
     <arg name="project" default="publish_path" />
     <node pkg="$(arg project)" type="$(arg project)" name="$(arg project)" respawn="false" output="screen" >
         <rosparam subst_value="true"> 
-            input_type: pose
+            input_type: pose     <!-- pose, posestamp , odometry-->
             input_topic: /robot_pose
             world_frame: map
             path_topic: /history_path
