@@ -84,9 +84,9 @@ public:
     {
         if (num_limit == true && poses_vec.size() >  static_cast<std::vector<pose_time_vec>::size_type>(num_max_size))
         {
-            std::cout<<"poses_vec_size = "<<poses_vec.size()<<std::endl;
+            // std::cout<<"poses_vec_size = "<<poses_vec.size()<<std::endl;
             poses_vec.erase(poses_vec.begin());
-            std::cout<<"poses_vec_size2 = "<<poses_vec.size()<<std::endl;
+            // std::cout<<"poses_vec_size2 = "<<poses_vec.size()<<std::endl;
         }
 
         if (time_limit)
