@@ -7,8 +7,6 @@ public:
     ros::Subscriber sub_pose;
     ros::Subscriber sub_odometry;
 
-    // ros::Subscriber sub_custom;
-
     ros::Publisher pub_path;
 
     vector<pose_time_vec> poses_vec;
@@ -21,8 +19,6 @@ public:
         sub_pose = nh.subscribe<geometry_msgs::Pose>(input_topic_pose, 100, &PublishPath::pose_callback, this);
         sub_odometry = nh.subscribe<nav_msgs::Odometry>(input_topic_odometry, 100, &PublishPath::odometry_callback, this);
 
-        // sub_custom = nh.subscribe<publish_path::CustomMsg>(input_topic, 100, &PublishPath::custom_callback, this);
-
         pub_path = nh.advertise<nav_msgs::Path>(path_topic, 10);
         allocateMemory();
     }
@@ -31,24 +27,6 @@ public:
     {
 
     }
-
-    // void custom_callback(const publish_path::CustomMsg::ConstPtr& msg)
-    // {
-    //     if (msg->pose_stamped.header.stamp != ros::Time(0))
-    //     {
-    //         posestamp_callback(boost::make_shared<geometry_msgs::PoseStamped>(msg->pose_stamped));
-    //     }
-    //     else if (msg->pose.position.x != 0 || msg->pose.position.y != 0 || msg->pose.position.z != 0)
-    //     {
-    //         pose_callback(boost::make_shared<geometry_msgs::Pose>(msg->pose));
-    //     }
-    //     else if (msg->odometry.header.stamp != ros::Time(0))
-    //     {
-    //         odometry_callback(boost::make_shared<nav_msgs::Odometry>(msg->odometry));
-    //     }
-
-    //     filtered_pose();
-    // }
 
     void posestamp_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
     {
@@ -106,14 +84,13 @@ public:
     {
         if (num_limit == true && poses_vec.size() >  static_cast<std::vector<pose_time_vec>::size_type>(num_max_size))
         {
-            std::lock_guard<std::mutex> lock(poses_mutex);
+            std::cout<<"poses_vec_size = "<<poses_vec.size()<<std::endl;
             poses_vec.erase(poses_vec.begin());
+            std::cout<<"poses_vec_size2 = "<<poses_vec.size()<<std::endl;
         }
 
         if (time_limit)
         {
-            std::lock_guard<std::mutex> lock(poses_mutex);
-
             ros::Time current_time = ros::Time::now();
             while (!poses_vec.empty() && (current_time - poses_vec.front().timestamp).toSec() > time_max_limit) {
                 poses_vec.erase(poses_vec.begin());

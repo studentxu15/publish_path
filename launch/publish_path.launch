@@ -9,9 +9,9 @@
             path_topic: /history_path
             pub_frequency: 1.0
             num_limit: false
-            num_max_size: 20000
-            time_limit: false
-            time_max_limit: 100.0
+            num_max_size: 3000
+            time_limit: true
+            time_max_limit: 10000.0
         </rosparam>
     </node>
 </launch>
