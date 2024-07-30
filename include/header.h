@@ -38,6 +38,8 @@ public:
     bool time_limit;
     double time_max_limit;
 
+    double distance_threshold;
+
     std::string input_type;
 
     std::string input_topic_posestamp;
@@ -49,6 +51,7 @@ public:
 		: private_nh("~")
 	{
 		nh.param<std::string>("/PROJECT_NAME", PROJECT_NAME, "publish_path");
+        nh.param<double>(PROJECT_NAME + "/distance_threshold", distance_threshold, 0.01);
         private_nh.param<std::string>("input_topic", input_topic, "/pose00");
         private_nh.param<std::string>("world_frame", world_frame, "map");
         private_nh.param<std::string>("path_topic", path_topic, "/path");

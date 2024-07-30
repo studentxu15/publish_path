@@ -8,9 +8,9 @@
             world_frame: map
             path_topic: /history_path
             pub_frequency: 1.0
-            num_limit: false
-            num_max_size: 3000
-            time_limit: true
+            num_limit: true
+            num_max_size: 100000
+            time_limit: false
             time_max_limit: 10000.0
         </rosparam>
     </node>
