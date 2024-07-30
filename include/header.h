@@ -11,6 +11,8 @@
 #include <thread>
 #include <vector>
 #include <nav_msgs/Path.h>
+#include <dynamic_reconfigure/server.h>
+#include "publish_path/ReconfigConfig.h"
 #include "publish_path/CustomMsg.h"
 
 using namespace std;

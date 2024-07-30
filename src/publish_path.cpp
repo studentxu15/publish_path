@@ -1,5 +1,6 @@
 #include "header.h"
 
+
 class PublishPath : public ParamServer
 {
 public:
@@ -13,6 +14,7 @@ public:
 
     std::mutex poses_mutex;
     bool arrive_thre;
+
 
     PublishPath()
     {
@@ -167,6 +169,17 @@ public:
             rate.sleep();
         }
     }
+
+    void dynamic_reconfig_callback(publish_path::ReconfigConfig &config, uint32_t level)
+    {
+        ROS_INFO("Reconfigure Request: distance_threshold=%f, num_limit=%d, time_limit=%d",
+                 config.distance_threshold, config.num_limit, config.time_limit);
+        distance_threshold = config.distance_threshold;
+        num_limit = config.num_limit;
+        time_limit = config.time_limit;
+        num_max_size = config.num_max_size;
+        time_max_limit = config.time_max_limit;
+    }
 };
 
 int main(int argc, char** argv)
@@ -176,6 +189,12 @@ int main(int argc, char** argv)
     PublishPath PP;
 
     ROS_INFO("\033[1;32m----> Publish Path Node START.\033[0M");
+
+    dynamic_reconfigure::Server<publish_path::ReconfigConfig> reconfig_server;
+    dynamic_reconfigure::Server<publish_path::ReconfigConfig>::CallbackType figure;
+    figure = boost::bind(&PublishPath::dynamic_reconfig_callback, &PP, _1, _2);
+    reconfig_server.setCallback(figure);
+
 
     std::thread PublishpathThread(&PublishPath::path_publish, &PP);
 

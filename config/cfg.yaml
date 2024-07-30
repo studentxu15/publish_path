@@ -1,0 +1,4 @@
+PROJECT_NAME: "publish_path"
+
+publish_path:
+  distance_threshold: 0.1

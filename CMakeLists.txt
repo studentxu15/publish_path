@@ -14,6 +14,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -g -pthread")
 
 ## 查找catkin并包含所有依赖项
 find_package(catkin REQUIRED COMPONENTS
+  dynamic_reconfigure
   roscpp
   tf
   sensor_msgs
@@ -33,6 +34,10 @@ generate_messages(
   std_msgs
   nav_msgs
   sensor_msgs
+)
+
+generate_dynamic_reconfigure_options(
+  config/Reconfig.cfg
 )
 
 ## 配置catkin
